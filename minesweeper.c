@@ -3,6 +3,8 @@
 #include <time.h>
 #include <stdbool.h>
 
+int odkrytePola = 0;
+int gameMode;
 // Funkcja do tworzenia planszy Minesweepera
 void initializeBoard(char** board, int rows, int cols, int mines) {
     // Inicjalizowanie planszy pustymi komórkami
@@ -12,6 +14,24 @@ void initializeBoard(char** board, int rows, int cols, int mines) {
         }
     }
 }
+
+void koniec(){
+    int score = odkrytePola*gameMode;
+    printf("Twó wynik: %d\n", score);
+    saveScore(score);
+}
+
+void saveScore(int score){
+    FILE* file = fopen("wyniki.txt", "a");
+    if (file == NULL){
+        printf("Błąd otwierania pliku\n");
+        return;
+    }
+    fprintf(file, "Punkty: %d\n", score);
+    fclose(file);
+    printf("Miłej kolejnej gierki!:)\n");
+}
+
     // Losowe rozmieszczanie min
 void placeMines(char** board, int rows, int cols, int mines, int safeX, int safeY){
     int r, c, i, j;
@@ -53,14 +73,21 @@ void placeMines(char** board, int rows, int cols, int mines, int safeX, int safe
 }
 void printPlayerView(char** playerView, int rows, int cols){
     int j;
-    printf(" ");
+    printf("  ");
     for (int nc = 0; nc < cols; nc++){
-        printf("   %d", nc+1);
+        if( nc<= 9){
+            printf("  %d ", nc+1);
+        }else{
+            printf("  %d", nc+1);
+        }
     }
     printf("\n");
     for(int nr = 0; nr < rows; nr++){
+        if(nr<9){
+            printf(" ");
+        }
         printf("%d.", nr+1);
-        for(j = 0; j <= cols; j++){
+        for(j = 0; j < cols; j++){
             printf("| %c ", playerView[nr][j]);
         }
         printf("\n");
@@ -69,12 +96,21 @@ void printPlayerView(char** playerView, int rows, int cols){
 
 // Funkcja do wyświetlania planszy na początku
 void printBoard(char** board, int rows, int cols) {
-    for (int nc = 1; nc <= cols; nc++){
-        printf("   %d", nc);
+    printf("  ");
+    for (int nc = 0; nc < cols; nc++){
+        if(nc<=9){
+            printf("  %d ", nc+1); 
+        }else{
+            printf("  %d", nc+1);
+        }
+       
     }
     printf("\n");
-    for (int i = 1; i < rows; i++) {
-        printf("%d.", i);
+    for (int i = 0; i < rows; i++) {
+        if(i<9){
+            printf(" ");
+        }
+        printf("%d.", i+1);
         for (int j = 0; j <= cols; j++) {
             printf("|   ", board[i][j]);
         }
@@ -88,8 +124,8 @@ void reveal(char** board, char** playerView, int rows, int cols, int x, int y) {
     if (x < 0 || x >= rows || y < 0 || y >= cols || playerView[x][y] != '.' || board[x][y] == 'X') {
         return;
     }
-
     playerView[x][y] = board[x][y];
+    odkrytePola++;
     if (board[x][y] == '0') { // Jeśli pole jest puste, odkrywamy sąsiednie
         for (dx = -1; dx <= 1; dx++) {
             for (dy = -1; dy <= 1; dy++) {
@@ -103,7 +139,6 @@ void reveal(char** board, char** playerView, int rows, int cols, int x, int y) {
 
 int main() {
     int rows, cols, mines, x, y;
-    int gameMode;
     char command;
     bool firstMove = true;
     printf("Wbierz tryb gry:\n 1 - łatwy (9x9 i 10 min)\n 2 - średni (16x16 i 40 min)\n 3 - trudny (16x30 i 99 min)\n 4 - Niestandardowy (własny wybór)\n Wybór:\n"); //Wybór trybu gry
@@ -160,7 +195,7 @@ int main() {
         printf("Podaj polecenie (f x y - flaga, r x y - odkryj): ");
         scanf(" %c %d %d", &command, &x, &y);
 
-        if (x < 0 || x >= rows || y < 0 || y >= cols) {
+        if (x < 0 || x > rows || y < 0 || y > cols) {
             printf("Nieprawidłowe współrzędne!\n");
             continue;
         }
@@ -194,23 +229,31 @@ int main() {
                 printf("To pole zostało już odkryte!\n");
             }
         } else {
-            printf("Złe polecenie, użyj: r x y aby odkryć pole lub f x y aby postawić (lub zdjąć już postawioną) flagę\n");
+            printf("Złe polecenie, użyj: r x y aby odkryć pole lub f x y aby postawić (lub zdjąć już postawioną) fl\n");
         }
     }
 
     printf("\nOstateczny stan planszy:\n");
-    printf(" ");
-    for (int nrc; nrc < cols; nrc++){
-        printf("   %d", nrc+1);
+    printf("  ");
+    for (int nrc=0; nrc < cols; nrc++){
+        if( nrc<=9){
+            printf("  %d ", nrc+1);
+        }else{
+            printf("  %d", nrc+1);
+        }
     }
     printf("\n");
     for (int i = 0; i < rows; i++) {
+        if(i<9){
+            printf(" ");
+        }
         printf("%d.", i+1);
         for (int j = 0; j <= cols; j++) {
             printf("| %c ", board[i][j]);
         }
         printf("\n");
     }
+    koniec();
      // Zwalnianie pamięci
     for (int i = 0; i < rows; i++) {
         free(board[i]);
