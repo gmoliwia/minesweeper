@@ -48,7 +48,7 @@ int main() {
     }
     char** board = (char**)malloc(rows * sizeof(char*));
     char** playerView = (char**)malloc(rows * sizeof(char*));
-        for (int i = 0; i<cols; i++){
+        for (int i = 0; i<rows; i++){
             board[i] = (char*)malloc(cols * sizeof(char));
             playerView[i] = (char*)malloc(cols * sizeof(char));
             for (int j = 0; j < cols; j++) {

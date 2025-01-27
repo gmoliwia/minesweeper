@@ -6,7 +6,6 @@
 
 //Widok gracza
 void printPlayerView(char** playerView, int rows, int cols){
-    int j;
     printf("  ");
     for (int nc = 0; nc < cols; nc++){
         if( nc<= 9){
@@ -21,7 +20,7 @@ void printPlayerView(char** playerView, int rows, int cols){
             printf(" ");
         }
         printf("%d.", nr+1);
-        for(j = 0; j <= cols; j++){
+        for(int j = 0; j <= cols; j++){
             printf("| %c ", playerView[nr][j]);
         }
         printf("\n");
