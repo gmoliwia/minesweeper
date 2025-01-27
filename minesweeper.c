@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
-
+#define MAX_TOP_RESULT  5
 int odkrytePola = 0;
 int gameMode;
 // Funkcja do tworzenia planszy Minesweepera
@@ -17,7 +17,7 @@ void initializeBoard(char** board, int rows, int cols, int mines) {
 
 void koniec(){
     int score = odkrytePola*gameMode;
-    printf("Twó wynik: %d\n", score);
+    printf("Twój wynik: %d\n", score);
     saveScore(score);
 }
 
@@ -27,9 +27,36 @@ void saveScore(int score){
         printf("Błąd otwierania pliku\n");
         return;
     }
-    fprintf(file, "Punkty: %d\n", score);
+    fprintf(file, "%d\n", score);
     fclose(file);
     printf("Miłej kolejnej gierki!:)\n");
+}
+void printScore(const char* filename){
+    FILE* file = fopen(filename, "r");
+    if(file == NULL){
+        printf("Błąd otwierania pliku\n");
+        return;
+    }
+    int TOP[MAX_TOP_RESULT] = {0};
+    int scores;
+    while(fscanf(file, "%d", &scores) == 1){
+        for(int i = 0; i<MAX_TOP_RESULT; i++){
+            if(scores > TOP[i]){
+                for(int j = MAX_TOP_RESULT - 1;j>i; j-- ){
+                    TOP[j] = TOP[j-1];
+                }
+                TOP[i] = scores;
+                break;
+            }
+        }
+    }
+    fclose(file);
+    printf("Top %d wyników:\n", MAX_TOP_RESULT);
+    for(int i = 0; i<MAX_TOP_RESULT; i++){
+        if(TOP[i]>0){
+            printf("%d\n", TOP[i]);
+        }
+    }
 }
 
     // Losowe rozmieszczanie min
@@ -71,6 +98,7 @@ void placeMines(char** board, int rows, int cols, int mines, int safeX, int safe
         }
     }
 }
+
 void printPlayerView(char** playerView, int rows, int cols){
     int j;
     printf("  ");
@@ -118,6 +146,7 @@ void printBoard(char** board, int rows, int cols) {
     }
     
 }
+
 // Funkcja odkrywająca pole
 void reveal(char** board, char** playerView, int rows, int cols, int x, int y) {
     int dx, dy; 
@@ -253,6 +282,8 @@ int main() {
         }
         printf("\n");
     }
+    const char *filename = "wyniki.txt";
+    printScore(filename);
     koniec();
      // Zwalnianie pamięci
     for (int i = 0; i < rows; i++) {
