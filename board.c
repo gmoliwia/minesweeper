@@ -61,7 +61,7 @@ void printBoard(char** board, int rows, int cols) {
 }
 //Rozmieszczenie min losowo
 void placeMines(char** board, int rows, int cols, int mines, int safeX, int safeY){
-    int r, c, i, j;
+    int r, c;
     srand(time(NULL));
     int placedMines = 0;
 

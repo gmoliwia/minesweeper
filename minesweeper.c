@@ -4,16 +4,10 @@
 #include <stdbool.h>
 #include "board.h"
 #include "score.h"
+#include "game.h"
 #define MAX_TOP_RESULT  5
-int odkrytePola = 0;
-int gameMode;
-//wypisywanie aktualnego wyniku na końcu gry
-void koniec(){
-    int score = odkrytePola*gameMode;
-    printf("Twój wynik: %d\n", score);
-    saveScore(score);
-}
 
+#ifndef TESTING
 int main() {
     int rows, cols, mines, x, y;
     char command;
@@ -143,3 +137,4 @@ int main() {
     free(playerView);
     return 0;
 }
+#endif

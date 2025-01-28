@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "score.h"
-
+#include "game.h"
+int isTestMode = 0;
 #define MAX_TOP_RESULT 5
 //zapisywanie wyniku do pliku
 void saveScore(int score){
@@ -12,7 +13,9 @@ void saveScore(int score){
     }
     fprintf(file, "%d\n", score);
     fclose(file);
-    printf("Miłej kolejnej gierki!:)\n");
+    if( !isTestMode){
+        printf("Miłej kolejnej gierki!:)\n");
+    }
 }
 //wypisywanie 5 najlepszych wyników
 void printScore(const char* filename){
