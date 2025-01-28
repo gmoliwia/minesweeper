@@ -14,6 +14,10 @@ int main() {
     bool firstMove = true;
     printf("Wbierz tryb gry:\n 1 - łatwy (9x9 i 10 min)\n 2 - średni (16x16 i 40 min)\n 3 - trudny (16x30 i 99 min)\n 4 - Niestandardowy (własny wybór)\n Wybór:\n"); //Wybór trybu gry
     scanf("%d", &gameMode);
+    if(gameMode < 1 || gameMode > 4){
+        printf("Błąd wybierania trybu gry\n");
+        return 1;
+    }
     switch (gameMode){
         case 1:
             rows = 9;
