@@ -131,8 +131,9 @@ int main() {
         printf("\n");
     }
     const char *filename = "wyniki.txt";
-    printScore(filename);
     koniec();
+    printScore(filename);
+    
      // Zwalnianie pamięci
     for (int i = 0; i < rows; i++) {
         free(board[i]);
