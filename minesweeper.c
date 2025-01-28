@@ -38,7 +38,7 @@ int main() {
             printf("Podaj liczbę wierszy, kolum i min\n");
             scanf("%d %d %d", &rows, &cols, &mines);
             if (mines >= rows*cols){
-            printf("Zbyt dużo min jak na tą planszę!\n");
+                printf("Zbyt dużo min jak na tą planszę!\n");
             return 1;
             }
             
