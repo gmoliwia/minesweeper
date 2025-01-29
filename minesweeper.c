@@ -7,7 +7,6 @@
 #include "game.h"
 #define MAX_TOP_RESULT  5
 
-#ifndef TESTING
 int main() {
     int rows, cols, mines, x, y;
     char command;
@@ -141,4 +140,3 @@ int main() {
     free(playerView);
     return 0;
 }
-#endif
